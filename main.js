@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
   const page = document.querySelector("div");
-  const userInput = document.querySelector("#search-bar.input.message");
+  const userInput = document.getElementById("search-bar");
   const submitButton = document.getElementsByTagName("input")[1];
   const newLocal = "https://www.thecocktaildb.com/api/json/v1/1/filter.php?i=";
   const url = newLocal;
@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", () => {
     "https://www.thecocktaildb.com/api/json/v1/1/search.php?s=margarita";
   //const itemLookUp = `${userInput.value}`;
 
-  const form = document.querySelector(".block-card");
+  const form = document.getElementsByTagName("form");
   const field = document.querySelector("fieldset");
   form.style.position = "absolute";
   field.style.position = "sticky";
@@ -24,7 +24,7 @@ document.addEventListener("DOMContentLoaded", () => {
       //ingredients.textContent = item.map
       //ingredients.textContent =
       drinkImage.addEventListener("click", () => {
-        ingredientsList(item.idDrink);
+        ingredientsList(drinks);
       });
       drinkName.textContent = item.strDrink;
       drinkName.style.paddingLeft = "1rem";
@@ -76,15 +76,16 @@ document.addEventListener("DOMContentLoaded", () => {
     ); //console.log(err.message))
   }
 
-  submitButton.addEventListener("click", () => {
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
     return drinkOrder();
   });
 
-  function ingredientsList(idDrink) {
+  function ingredientsList({idDrink}) {
     //www.thecocktaildb.com/api/json/v1/1/lookup.php?i=11007
     const idCall = "https://thecocktaildb.com/api/json/v1/1/lookup.php?i=";
-    //console.log(idDrink)
-    return fetch(`${idCall}${idDrink}`)
+    console.log(idDrink)
+    return fetch(`${idCall}${}`)
       .then(function (resp) {
         if (!resp.ok || !resp) {
           throw new Error(resp.statusText);
@@ -93,7 +94,7 @@ document.addEventListener("DOMContentLoaded", () => {
         return result;
       })
       .then((data) => {
-        //console.log(data)
+        console.log(data)
 
         for (let i = 1; i <= 15; i++) {
           const label = document.createElement("p");
@@ -103,7 +104,7 @@ document.addEventListener("DOMContentLoaded", () => {
             contents.textContent = data.drinks[0][`strIngredient${i}`];
 
             label.append(contents);
-            boxContent.append(label);
+            return document.body.append(label);
             //return page
           }
         }
